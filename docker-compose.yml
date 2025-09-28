@@ -1,0 +1,13 @@
+services:
+  studio118-bot:
+    build: .
+    container_name: studio118-bot
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - .env
+    volumes:
+      - ./auth_info_baileys:/usr/src/app/auth_info_baileys
+    tty: true
+    stdin_open: true

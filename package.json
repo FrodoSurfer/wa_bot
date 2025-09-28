@@ -1,0 +1,20 @@
+{
+  "name": "studio118-bot-final",
+  "version": "1.0.0",
+  "description": "Bot de WhatsApp para Studio 118 con Baileys y Gemini",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "list-models": "node scripts/list-models.mjs"
+  },
+  "author": "Frodo Surfer",
+  "license": "ISC",
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "@whiskeysockets/baileys": "^6.7.2",
+    "dotenv": "^16.4.5",
+    "pino": "^8.1.0",
+    "qrcode-terminal": "^0.12.0"
+  }
+}
