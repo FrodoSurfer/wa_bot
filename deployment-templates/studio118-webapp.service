@@ -1,0 +1,21 @@
+[Unit]
+Description=Studio 118 Web App
+After=network.target
+
+[Service]
+Type=simple
+User=dietpi
+WorkingDirectory=/opt/studio
+ExecStart=/usr/bin/node webapp/server.js
+Restart=always
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=studio118-webapp
+Environment=NODE_ENV=production
+
+# Optional: Uncomment to set custom port
+# Environment=WEBAPP_PORT=3008
+
+[Install]
+WantedBy=multi-user.target
