@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-    "list-models": "node scripts/list-models.mjs"
+    "list-models": "node scripts/list-models.mjs",
+    "webapp": "node webapp/server.js",
+    "dev": "node webapp/server.js"
   },
   "author": "Frodo Surfer",
   "license": "ISC",
@@ -15,6 +17,9 @@
     "@whiskeysockets/baileys": "^6.7.2",
     "dotenv": "^16.4.5",
     "pino": "^8.1.0",
-    "qrcode-terminal": "^0.12.0"
+    "qrcode-terminal": "^0.12.0",
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "better-sqlite3": "^9.2.2"
   }
 }

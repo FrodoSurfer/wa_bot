@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio 118 - Gestión</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: var(--tg-theme-bg-color, #ffffff);
+            color: var(--tg-theme-text-color, #000000);
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .btn-primary {
+            background-color: var(--tg-theme-button-color, #3390ec);
+            color: var(--tg-theme-button-text-color, #ffffff);
+        }
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div id="app" class="container mx-auto p-4 max-w-4xl">
+        <!-- Header -->
+        <div class="mb-6">
+            <h1 class="text-3xl font-bold mb-2">✨ Studio 118</h1>
+            <p class="text-gray-600">Sistema de Gestión</p>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="flex border-b mb-6 overflow-x-auto">
+            <button onclick="showTab('appointments')" class="tab-btn px-4 py-2 font-medium border-b-2 border-blue-500 text-blue-500" data-tab="appointments">
+                📅 Citas
+            </button>
+            <button onclick="showTab('clients')" class="tab-btn px-4 py-2 font-medium text-gray-500 hover:text-gray-700" data-tab="clients">
+                👥 Clientes
+            </button>
+            <button onclick="showTab('services')" class="tab-btn px-4 py-2 font-medium text-gray-500 hover:text-gray-700" data-tab="services">
+                💇 Servicios
+            </button>
+            <button onclick="showTab('schedule')" class="tab-btn px-4 py-2 font-medium text-gray-500 hover:text-gray-700" data-tab="schedule">
+                🚫 Bloques
+            </button>
+        </div>
+
+        <!-- Appointments Tab -->
+        <div id="appointments-tab" class="tab-content active">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold">Citas Programadas</h2>
+                <button onclick="showAppointmentForm()" class="btn-primary px-4 py-2 rounded-lg">
+                    + Nueva Cita
+                </button>
+            </div>
+
+            <!-- Date Filter -->
+            <div class="mb-4">
+                <input type="date" id="appointment-date-filter" class="border rounded px-3 py-2 w-full md:w-auto"
+                    onchange="filterAppointments()">
+            </div>
+
+            <!-- Appointments List -->
+            <div id="appointments-list" class="space-y-3">
+                <!-- Loaded dynamically -->
+            </div>
+
+            <!-- Appointment Form Modal -->
+            <div id="appointment-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                <div class="bg-white rounded-lg p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
+                    <h3 class="text-xl font-bold mb-4" id="appointment-modal-title">Nueva Cita</h3>
+                    <form id="appointment-form" onsubmit="saveAppointment(event)">
+                        <input type="hidden" id="appointment-id">
+                        
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium mb-1">Cliente</label>
+                            <select id="appointment-client" required class="border rounded px-3 py-2 w-full">
+                                <option value="">Seleccionar cliente...</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium mb-1">Servicio</label>
+                            <select id="appointment-service" required class="border rounded px-3 py-2 w-full">
+                                <option value="">Seleccionar servicio...</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium mb-1">Fecha y Hora</label>
+                            <input type="datetime-local" id="appointment-datetime" required class="border rounded px-3 py-2 w-full">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium mb-1">Estado</label>
+                            <select id="appointment-status" class="border rounded px-3 py-2 w-full">
+                                <option value="pending">Pendiente</option>
+                                <option value="confirmed">Confirmada</option>
+                                <option value="completed">Completada</option>
+                                <option value="cancelled">Cancelada</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium mb-1">Precio (opcional)</label>
+                            <input type="number" id="appointment-price" step="0.01" class="border rounded px-3 py-2 w-full" placeholder="Precio del servicio">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium mb-1">Notas</label>
+                            <textarea id="appointment-notes" class="border rounded px-3 py-2 w-full" rows="3"></textarea>
+                        </div>
+
+                        <div class="flex gap-2">
+                            <button type="submit" class="btn-primary px-4 py-2 rounded-lg flex-1">
+                                Guardar
+                            </button>
+                            <button type="button" onclick="closeAppointmentModal()" class="border px-4 py-2 rounded-lg">
+                                Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Clients Tab -->
+        <div id="clients-tab" class="tab-content">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold">Clientes</h2>
+                <button onclick="showClientForm()" class="btn-primary px-4 py-2 rounded-lg">
+                    + Nuevo Cliente
+                </button>
+            </div>
+
+            <!-- Search -->
+            <div class="mb-4">
+                <input type="text" id="client-search" placeholder="Buscar por nombre o teléfono..." 
+                    class="border rounded px-3 py-2 w-full" oninput="searchClients()">
+            </div>
+
+            <!-- Clients List -->
+            <div id="clients-list" class="space-y-3">
+                <!-- Loaded dynamically -->
+            </div>
+
+            <!-- Client Form Modal -->
+            <div id="client-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                <div class="bg-white rounded-lg p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
+                    <h3 class="text-xl font-bold mb-4" id="client-modal-title">Nuevo Cliente</h3>
+                    <form id="client-form" onsubmit="saveClient(event)">
+                        <input type="hidden" id="client-id">
+                        
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium mb-1">Nombre *</label>
+                            <input type="text" id="client-name" required class="border rounded px-3 py-2 w-full">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium mb-1">Teléfono *</label>
+                            <input type="tel" id="client-phone" required class="border rounded px-3 py-2 w-full">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium mb-1">Email</label>
+                            <input type="email" id="client-email" class="border rounded px-3 py-2 w-full">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium mb-1">Notas</label>
+                            <textarea id="client-notes" class="border rounded px-3 py-2 w-full" rows="3"></textarea>
+                        </div>
+
+                        <div class="flex gap-2">
+                            <button type="submit" class="btn-primary px-4 py-2 rounded-lg flex-1">
+                                Guardar
+                            </button>
+                            <button type="button" onclick="closeClientModal()" class="border px-4 py-2 rounded-lg">
+                                Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Services Tab -->
+        <div id="services-tab" class="tab-content">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold">Servicios y Precios</h2>
+                <button onclick="showServiceForm()" class="btn-primary px-4 py-2 rounded-lg">
+                    + Nuevo Servicio
+                </button>
+            </div>
+
+            <!-- Services List -->
+            <div id="services-list" class="space-y-3">
+                <!-- Loaded dynamically -->
+            </div>
+
+            <!-- Service Form Modal -->
+            <div id="service-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                <div class="bg-white rounded-lg p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
+                    <h3 class="text-xl font-bold mb-4" id="service-modal-title">Nuevo Servicio</h3>
+                    <form id="service-form" onsubmit="saveService(event)">
+                        <input type="hidden" id="service-id">
+                        
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium mb-1">Nombre *</label>
+                            <input type="text" id="service-name" required class="border rounded px-3 py-2 w-full">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium mb-1">Descripción</label>
+                            <textarea id="service-description" class="border rounded px-3 py-2 w-full" rows="2"></textarea>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium mb-1">Precio Base ($) *</label>
+                            <input type="number" id="service-price" required step="0.01" class="border rounded px-3 py-2 w-full">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium mb-1">Duración (minutos) *</label>
+                            <input type="number" id="service-duration" required class="border rounded px-3 py-2 w-full">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="flex items-center">
+                                <input type="checkbox" id="service-active" checked class="mr-2">
+                                <span class="text-sm font-medium">Activo</span>
+                            </label>
+                        </div>
+
+                        <div class="flex gap-2">
+                            <button type="submit" class="btn-primary px-4 py-2 rounded-lg flex-1">
+                                Guardar
+                            </button>
+                            <button type="button" onclick="closeServiceModal()" class="border px-4 py-2 rounded-lg">
+                                Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schedule Blocks Tab -->
+        <div id="schedule-tab" class="tab-content">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold">Bloques de Horario</h2>
+                <button onclick="showScheduleForm()" class="btn-primary px-4 py-2 rounded-lg">
+                    + Nuevo Bloque
+                </button>
+            </div>
+
+            <p class="text-sm text-gray-600 mb-4">
+                Bloquea horarios para eventos, vacaciones o períodos no disponibles.
+            </p>
+
+            <!-- Schedule Blocks List -->
+            <div id="schedule-list" class="space-y-3">
+                <!-- Loaded dynamically -->
+            </div>
+
+            <!-- Schedule Form Modal -->
+            <div id="schedule-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                <div class="bg-white rounded-lg p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
+                    <h3 class="text-xl font-bold mb-4">Nuevo Bloque de Horario</h3>
+                    <form id="schedule-form" onsubmit="saveScheduleBlock(event)">
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium mb-1">Inicio *</label>
+                            <input type="datetime-local" id="schedule-start" required class="border rounded px-3 py-2 w-full">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium mb-1">Fin *</label>
+                            <input type="datetime-local" id="schedule-end" required class="border rounded px-3 py-2 w-full">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium mb-1">Motivo</label>
+                            <input type="text" id="schedule-reason" class="border rounded px-3 py-2 w-full" placeholder="Vacaciones, evento, etc.">
+                        </div>
+
+                        <div class="flex gap-2">
+                            <button type="submit" class="btn-primary px-4 py-2 rounded-lg flex-1">
+                                Guardar
+                            </button>
+                            <button type="button" onclick="closeScheduleModal()" class="border px-4 py-2 rounded-lg">
+                                Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
