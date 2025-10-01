@@ -1,0 +1,24 @@
+{
+  "efecto_de_color": {
+    "corto": 3500,
+    "medio": 3700,
+    "largo": 4300,
+    "descripcion": "Incluye lavado, aplicación de color, secado y peinado"
+  },
+  "extensiones": {
+    "corto": 4500,
+    "medio": 5000,
+    "largo": 5500,
+    "descripcion": "Aplicación de extensiones permanentes"
+  },
+  "nanoplastia": {
+    "corto": 2500,
+    "medio": 2800,
+    "largo": 3200,
+    "descripcion": "Tratamiento de alisado sin formol"
+  },
+  "corte": {
+    "base": 350,
+    "descripcion": "Corte de cabello profesional"
+  }
+}

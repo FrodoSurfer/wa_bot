@@ -6,6 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
+    "server": "node server.js",
+    "dev": "node server.js",
     "list-models": "node scripts/list-models.mjs"
   },
   "author": "Frodo Surfer",
@@ -13,7 +15,9 @@
   "dependencies": {
     "@google/generative-ai": "^0.21.0",
     "@whiskeysockets/baileys": "^6.7.2",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
+    "express": "^4.21.2",
     "pino": "^8.1.0",
     "qrcode-terminal": "^0.12.0"
   }
