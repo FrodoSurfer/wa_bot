@@ -70,6 +70,14 @@ app.post("/api/chat", async (req, res) => {
             });
         }
 
+        // Validate API key is configured
+        if (!process.env.GEMINI_API_KEY) {
+            return res.status(503).json({
+                error: "El servicio no está configurado correctamente. Por favor contacta al administrador.",
+                details: "GEMINI_API_KEY no está configurado"
+            });
+        }
+
         const session = getSession(userId);
         
         // Add user message to history

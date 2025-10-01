@@ -353,7 +353,7 @@
             const chatContainer = document.getElementById('chatContainer');
             const errorDiv = document.createElement('div');
             errorDiv.className = 'error';
-            errorDiv.textContent = message;
+            errorDiv.textContent = '⚠️ ' + message;
             chatContainer.appendChild(errorDiv);
             chatContainer.scrollTop = chatContainer.scrollHeight;
             
@@ -417,7 +417,15 @@
                 
             } catch (error) {
                 console.error('Error sending message:', error);
-                showError('Error al enviar el mensaje. Por favor intenta de nuevo.');
+                
+                // Check if it's a network error
+                if (!navigator.onLine) {
+                    showError('Sin conexión a internet. Por favor verifica tu conexión.');
+                } else if (error.message.includes('503')) {
+                    showError('El servicio no está disponible temporalmente. Intenta más tarde.');
+                } else {
+                    showError('Error al enviar el mensaje. Por favor intenta de nuevo.');
+                }
                 
                 // Provide error haptic feedback
                 if (tg.HapticFeedback) {

@@ -8,6 +8,7 @@
     "start": "node index.js",
     "server": "node server.js",
     "dev": "node server.js",
+    "test": "node test-api.mjs",
     "list-models": "node scripts/list-models.mjs"
   },
   "author": "Frodo Surfer",
