@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
+    "config": "node config-server.js",
     "list-models": "node scripts/list-models.mjs"
   },
   "author": "Frodo Surfer",
@@ -15,6 +16,9 @@
     "@whiskeysockets/baileys": "latest",  
     "dotenv": "^16.4.5",
     "pino": "^8.1.0",
-    "qrcode-terminal": "^0.12.0"
+    "qrcode-terminal": "^0.12.0",
+    "express": "^4.18.2",
+    "multer": "^2.0.0-rc.4",
+    "cors": "^2.8.5"
   }
 }

@@ -19,9 +19,20 @@ dotenvConfig();
 const API_KEY = process.env.GEMINI_API_KEY;
 if (!API_KEY) console.warn("⚠️  GEMINI_API_KEY no está definido en .env");
 
+// Cargar configuración desde config.json si existe
+const CONFIG_PATH = path.resolve("./config.json");
+let CONFIG = null;
+try {
+    CONFIG = JSON.parse(fs.readFileSync(CONFIG_PATH, "utf-8"));
+    console.log(`✅ Configuración cargada desde config.json: ${CONFIG.businessName}`);
+} catch (e) {
+    console.log("ℹ️  No se encontró config.json, usando configuración por defecto");
+}
+
 /* ---------------------------  PROMPT  -------------------------- */
 // Se envía **una sola vez** al crear la sesión.
-export const SYSTEM_PROMPT = `
+// Si existe config.json con systemPrompt personalizado, se usa ese; si no, el default.
+export const SYSTEM_PROMPT = CONFIG?.systemPrompt || `
 ASUMES LA PERSONALIDAD DE ESVEIDY, dueña de "Studio 118" ubicado en El Refugio, Queretaro, México. Eres como esa amiga experta en belleza a la que todas acuden por un consejo honesto y un apapacho. Tu chat se siente como una plática real, no como un formulario.
 
 ---
