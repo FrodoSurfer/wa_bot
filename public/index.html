@@ -420,6 +420,20 @@
                 if (response.ok && data.success) {
                     result.classList.add('active', 'success');
                     resultTitle.textContent = '✅ Configuración Generada Exitosamente';
+                    
+                    // Crear elemento de código de forma segura
+                    const codeBlock = document.createElement('div');
+                    codeBlock.className = 'code-block';
+                    const codeTitle = document.createElement('strong');
+                    codeTitle.textContent = 'Precios detectados:';
+                    const codeContent = document.createElement('pre');
+                    codeContent.textContent = JSON.stringify(data.precios, null, 2);
+                    codeContent.style.margin = '5px 0 0 0';
+                    codeContent.style.whiteSpace = 'pre-wrap';
+                    codeBlock.appendChild(codeTitle);
+                    codeBlock.appendChild(document.createElement('br'));
+                    codeBlock.appendChild(codeContent);
+                    
                     resultMessage.innerHTML = `
                         <p>${data.message}</p>
                         <p style="margin-top: 10px;">
@@ -432,11 +446,8 @@
                         <p style="margin-top: 15px; padding: 10px; background: #fff3cd; border-radius: 5px; border-left: 4px solid #ffc107;">
                             <strong>⚡ Siguiente paso:</strong> Reinicia tu bot de WhatsApp para que cargue la nueva configuración.
                         </p>
-                        <div class="code-block">
-                            <strong>Precios detectados:</strong><br>
-                            ${JSON.stringify(data.precios, null, 2)}
-                        </div>
                     `;
+                    resultMessage.appendChild(codeBlock);
                 } else {
                     throw new Error(data.error || 'Error desconocido');
                 }

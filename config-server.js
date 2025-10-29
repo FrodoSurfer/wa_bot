@@ -144,14 +144,28 @@ NO incluyas ningún texto adicional, solo el JSON.`;
         let textResponse = response.text();
 
         // Limpiar la respuesta para extraer solo el JSON
-        textResponse = textResponse.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
+        // Maneja varios formatos de bloques de código markdown
+        textResponse = textResponse
+            .replace(/```json\n?/gi, "")
+            .replace(/```javascript\n?/gi, "")
+            .replace(/```\n?/g, "")
+            .trim();
+        
+        // Si empieza y termina con comillas, quitarlas
+        if (textResponse.startsWith('"') && textResponse.endsWith('"')) {
+            textResponse = textResponse.slice(1, -1);
+        }
 
         let preciosJson;
         try {
+            // Validar que sea un string con estructura de JSON antes de parsear
+            if (!textResponse.startsWith("{") && !textResponse.startsWith("[")) {
+                throw new Error("La respuesta no parece ser JSON válido");
+            }
             preciosJson = JSON.parse(textResponse);
         } catch (e) {
             console.error("Error al parsear JSON de Gemini:", textResponse);
-            throw new Error("La IA no pudo generar un JSON válido");
+            throw new Error("La IA no pudo generar un JSON válido: " + e.message);
         }
 
         // Crear config.json
@@ -207,9 +221,13 @@ NO incluyas ningún texto adicional, solo el JSON.`;
         });
 
         // Eliminar la imagen subida después de procesarla
+        // Guardar la ruta en una variable local para evitar problemas de referencia
+        const uploadedFilePath = req.file.path;
         setTimeout(() => {
             try {
-                fs.unlinkSync(req.file.path);
+                if (uploadedFilePath && fs.existsSync(uploadedFilePath)) {
+                    fs.unlinkSync(uploadedFilePath);
+                }
             } catch (e) {
                 console.error("Error al eliminar archivo temporal:", e);
             }

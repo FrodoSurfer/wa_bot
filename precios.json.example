@@ -1,0 +1,45 @@
+{
+  "efecto_de_color": {
+    "corto": 3500,
+    "medio": 3700,
+    "largo": 4300,
+    "extra_largo": 5000,
+    "nota": "Incluye balayage, babylights, iluminación, mechas y efectos de color. El precio puede variar según la técnica específica."
+  },
+  "full_blonde": {
+    "corto": 4500,
+    "medio": 5000,
+    "largo": 5800,
+    "extra_largo": 6500,
+    "nota": "Decoloración completa y tono. Requiere evaluación previa del estado del cabello."
+  },
+  "matiz_o_correccion": {
+    "corto": 1200,
+    "medio": 1500,
+    "largo": 1800,
+    "nota": "Para eliminar tonos no deseados o corregir coloraciones previas."
+  },
+  "cubrimiento_de_cana": {
+    "30gr": 800,
+    "40gr": 1000,
+    "50gr": 1200,
+    "nota": "Precio según cantidad de tinte necesaria. Incluye aplicación y sellado."
+  },
+  "nanoplastia": {
+    "corto": 2500,
+    "medio": 3000,
+    "largo": 3500,
+    "extra_largo": 4000,
+    "nota": "Tratamiento de alisado y nutrición profunda. Duración 3-4 horas."
+  },
+  "corte": {
+    "base": 350,
+    "nota": "Corte de cabello con técnica personalizada según tu estilo."
+  },
+  "extensiones": {
+    "corto": 8000,
+    "medio": 10000,
+    "largo": 12000,
+    "nota": "Extensiones de queratina de alta calidad. El precio incluye aplicación. Cantidad de extensiones según largo deseado."
+  }
+}
