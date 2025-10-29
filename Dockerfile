@@ -11,7 +11,7 @@ RUN apk add --no-cache git
 COPY package*.json ./
 
 # Instalación de dependencias (usa ci si existe lockfile, si no, fallback a install)
-RUN npm ci --omit=dev || npm install --omit=dev
+RUN npm install --omit=dev
 
 # Copia del resto del código
 COPY . .
