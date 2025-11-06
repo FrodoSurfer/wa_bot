@@ -1,0 +1,40 @@
+{
+  "efecto_de_color": {
+    "corto": 3500,
+    "medio": 3700,
+    "largo": 4300,
+    "nota": "Incluye balayage, babylights, iluminación, mechas y efectos de color personalizados."
+  },
+  "full_blonde": {
+    "corto": 4500,
+    "medio": 5000,
+    "largo": 6000,
+    "nota": "Proceso completo de decoloración para lograr rubio total. Requiere valoración previa del cabello."
+  },
+  "matiz_o_correccion": {
+    "corto": 2500,
+    "medio": 2800,
+    "largo": 3200,
+    "nota": "Para neutralizar tonos no deseados o corregir coloraciones previas."
+  },
+  "cubrimiento_de_cana": {
+    "30gr": 650,
+    "40gr": 850,
+    "50gr": 1050,
+    "nota": "Precio varía según la cantidad de producto necesario. Incluye aplicación profesional."
+  },
+  "nanoplastia": {
+    "corto": 1800,
+    "medio": 2200,
+    "largo": 2800,
+    "extra_largo": 3500,
+    "nota": "Alisado de nanoplastia que reduce el frizz y da brillo. Dura aproximadamente 3-4 meses."
+  },
+  "corte": {
+    "base": 350,
+    "nota": "Incluye lavado, corte personalizado y secado. Estilos especiales pueden tener costo adicional."
+  },
+  "extensiones": {
+    "nota": "El precio de extensiones varía según el método (microbeads, queratina), cantidad de cabello y largo deseado. Se requiere consulta personalizada para cotización exacta."
+  }
+}
